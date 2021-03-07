@@ -37,7 +37,7 @@ class Products with ChangeNotifier {
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
   ];
-
+  int _startingId = 4;
   List<Product> get items {
     return [..._items];
   }
@@ -48,6 +48,15 @@ class Products with ChangeNotifier {
 
   void addProduct() {
     // _items.add(value);
+    _startingId++;
+    _items.add(Product(
+      id: " p$_startingId",
+      title: 'A Pan',
+      description: 'Prepare any meal you want.',
+      price: 49.99,
+      imageUrl:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
+    ));
     notifyListeners();
   }
 }
