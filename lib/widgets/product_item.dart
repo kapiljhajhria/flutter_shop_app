@@ -26,7 +26,7 @@ class ProductItem extends StatelessWidget {
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
-            builder: (context, data, widget) => IconButton(
+            builder: (context, data, _) => IconButton(
               icon: Icon(
                   data.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
