@@ -38,7 +38,22 @@ class Products with ChangeNotifier {
     ),
   ];
   int _startingId = 4;
+  bool _favoritesOnly = false;
+
+  showFavoritesOnly() {
+    _favoritesOnly = true;
+    notifyListeners();
+  }
+
+  showAll() {
+    _favoritesOnly = false;
+    notifyListeners();
+  }
+
   List<Product> get items {
+    if (_favoritesOnly) {
+      return [..._items.where((product) => product.isFavorite).toList()];
+    }
     return [..._items];
   }
 
@@ -49,14 +64,16 @@ class Products with ChangeNotifier {
   void addProduct() {
     // _items.add(value);
     _startingId++;
-    _items.add(Product(
-      id: " p$_startingId",
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 49.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ));
+    _items.add(
+      Product(
+        id: " p$_startingId",
+        title: 'A Pan',
+        description: 'Prepare any meal you want.',
+        price: 49.99,
+        imageUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
+      ),
+    );
     notifyListeners();
   }
 }
