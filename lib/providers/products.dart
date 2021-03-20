@@ -38,22 +38,22 @@ class Products with ChangeNotifier {
     ),
   ];
   int _startingId = 4;
-  bool _favoritesOnly = false;
+  // bool _favoritesOnly = false;
 
-  showFavoritesOnly() {
-    _favoritesOnly = true;
-    notifyListeners();
-  }
-
-  showAll() {
-    _favoritesOnly = false;
-    notifyListeners();
-  }
+  // showFavoritesOnly() {
+  //   _favoritesOnly = true;
+  //   notifyListeners();
+  // }
+  //
+  // showAll() {
+  //   _favoritesOnly = false;
+  //   notifyListeners();
+  // }
 
   List<Product> get items {
-    if (_favoritesOnly) {
-      return [..._items.where((product) => product.isFavorite).toList()];
-    }
+    // if (_favoritesOnly) {
+    //   return [..._items.where((product) => product.isFavorite).toList()];
+    // }
     return [..._items];
   }
 
