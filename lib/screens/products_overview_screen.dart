@@ -23,18 +23,16 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         title: Text('MyShop'),
         actions: [
           Consumer<Cart>(
-            builder: (BuildContext context, cart, _) {
-              return Badge(
-                  child: IconButton(
-                    icon: Icon(Icons.shopping_cart),
-                    onPressed: () {
-                      //go to cart screen
-
-                    },
-                  ),
+            builder: (BuildContext context, cart,ch) => Badge(
                   value: cart.itemCount.toString(),
-                  color: Theme.of(context).accentColor);
-            },
+                  color: Theme.of(context).accentColor, child: ch!,),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                //go to cart screen
+
+              },
+            ),
           ),
           PopupMenuButton(
             icon: Icon(Icons.more_vert),
