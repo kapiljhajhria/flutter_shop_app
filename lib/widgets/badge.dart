@@ -6,12 +6,12 @@ class Badge extends StatelessWidget {
     Key? key,
     required this.child,
     required this.value,
-    required this.color,
+    this.color,
   }) : super(key: key);
 
   final Widget child;
   final String value;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
