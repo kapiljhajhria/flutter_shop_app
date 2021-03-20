@@ -15,6 +15,8 @@ class ProductsGrid extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
+      ///TODO: fix bug, when in favorites mode, removing item from favorite should refresh state and remove the item from the fav list
+      ///ChangeNotifierProvider.value causing this bug
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: products[i],
         child: ProductItem(),
