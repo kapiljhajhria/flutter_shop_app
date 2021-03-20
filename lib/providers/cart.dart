@@ -20,6 +20,10 @@ class Cart with ChangeNotifier {
     return {..._items};
   }
 
+  int get itemCount{
+    return _items.length;
+  }
+
   void addItem(String productId, double price, String title) {
     //look if the product already exist in the cart or not
     //if found increase its quantity by 1
@@ -43,5 +47,6 @@ class Cart with ChangeNotifier {
               quanity: 1,
               price: price));
     }
+    notifyListeners();
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/providers/cart.dart';
 import 'package:flutter_complete_guide/providers/products.dart';
+import 'package:flutter_complete_guide/widgets/badge.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
@@ -12,7 +14,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  bool _showOnlyFavorites=false;
+  bool _showOnlyFavorites = false;
   @override
   Widget build(BuildContext context) {
     final productsContainer = Provider.of<Products>(context, listen: false);
@@ -20,19 +22,31 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       appBar: AppBar(
         title: Text('MyShop'),
         actions: [
+          Consumer<Cart>(
+            builder: (BuildContext context, cart, _) {
+              return Badge(
+                  child: IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: () {
+                      //go to cart screen
+
+                    },
+                  ),
+                  value: cart.itemCount.toString(),
+                  color: Theme.of(context).accentColor);
+            },
+          ),
           PopupMenuButton(
             icon: Icon(Icons.more_vert),
             onSelected: (selectedValue) {
               if (selectedValue == FilterOption.Favorites) {
                 // productsContainer.showFavoritesOnly();
-                _showOnlyFavorites=true;
+                _showOnlyFavorites = true;
               } else if (selectedValue == FilterOption.All) {
                 // productsContainer.showAll();
-                _showOnlyFavorites=false;
+                _showOnlyFavorites = false;
               }
-              setState(() {
-
-              });
+              setState(() {});
             },
             itemBuilder: (BuildContext context) {
               return <PopupMenuEntry>[
