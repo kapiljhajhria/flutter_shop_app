@@ -10,7 +10,7 @@ class Products with ChangeNotifier {
       description: 'A red shirt - it is pretty red!',
       price: 29.99,
       imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Men-Red-Plaid-Shirts-2016-Slim-Long-Sleeve-Brand-Formal-Business-Fashion-Dress-Shirts-Male-Social.jpg/600px-Men-Red-Plaid-Shirts-2016-Slim-Long-Sleeve-Brand-Formal-Business-Fashion-Dress-Shirts-Male-Social.jpg',
     ),
     Product(
       id: 'p2',
@@ -63,6 +63,7 @@ class Products with ChangeNotifier {
     // }
     return [..._items.where((item) => item.isFavorite).toList()];
   }
+
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
