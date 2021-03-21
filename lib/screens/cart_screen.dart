@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/cart.dart' show Cart;
+import 'package:flutter_complete_guide/providers/orders.dart';
 import 'package:provider/provider.dart';
 import '../widgets/cart_item.dart';
 
@@ -65,6 +66,12 @@ class CartScreen extends StatelessWidget {
             TextButton(
                 onPressed: () {
                   //place the order, move to confirmation or payment screen
+                  //add current order to orders list
+                  Provider.of<Orders>(context, listen: false)
+                      .addOrder(cart.items.values.toList(), cart.totalAmount);
+                  //empty the active cart now as we have moved to orders page
+                  cart.emptyCart();
+                  //move to orders screen
                 },
                 child: Text(
                   "ORDER NOW",
