@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/cart.dart' show Cart;
 import 'package:flutter_complete_guide/providers/orders.dart';
+import 'package:flutter_complete_guide/screens/orders_screen.dart';
 import 'package:provider/provider.dart';
 import '../widgets/cart_item.dart';
 
@@ -72,6 +73,7 @@ class CartScreen extends StatelessWidget {
                   //empty the active cart now as we have moved to orders page
                   cart.emptyCart();
                   //move to orders screen
+                  Navigator.of(context).pushNamed(OrdersScreen.routeName);
                 },
                 child: Text(
                   "ORDER NOW",
