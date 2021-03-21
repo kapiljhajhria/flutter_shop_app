@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/cart.dart';
 import 'package:provider/provider.dart';
+import '../widgets/cart_item.dart' as ci;
 
 class CartScreen extends StatelessWidget {
   static const routerName = '/cart';
@@ -52,7 +53,17 @@ class CartScreen extends StatelessWidget {
                       ))
                 ],
               ),
+              //Summary Cart with all items and option to remove or change their qty
             ),
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: cart.itemCount,
+                itemBuilder: (context, index) {
+                  final cartItemKey=cart.items.keys.toList()[index];
+                  final cartItem=cart.items[cartItemKey]!;
+                  return ci.CartItem(id: cartItemKey, title: cartItem.title, quantity: cartItem.quantity, price: cartItem.price);
+                }),
           )
         ],
       ),
