@@ -14,20 +14,20 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items=Map();
+  Map<String, CartItem> _items = Map();
 
   Map<String, CartItem> get items {
     return {..._items};
   }
 
-  int get itemCount{
+  int get itemCount {
     return _items.length;
   }
 
-  double get totalAmount{
-    double total =0.0;
+  double get totalAmount {
+    double total = 0.0;
     _items.forEach((key, cartItem) {
-      total+=(cartItem.price*cartItem.quantity).roundToDouble();
+      total += (cartItem.price * cartItem.quantity).roundToDouble();
     });
     return total;
   }
@@ -44,7 +44,7 @@ class Cart with ChangeNotifier {
           (existingCartItem) => CartItem(
               id: existingCartItem.id,
               title: existingCartItem.title,
-              quantity: existingCartItem.quantity+1,
+              quantity: existingCartItem.quantity + 1,
               price: existingCartItem.price));
     } else {
       _items.putIfAbsent(
