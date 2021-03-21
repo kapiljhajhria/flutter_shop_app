@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/providers/cart.dart';
+import 'package:flutter_complete_guide/providers/cart.dart' show Cart;
 import 'package:provider/provider.dart';
-import '../widgets/cart_item.dart' as ci;
+import '../widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routerName = '/cart';
@@ -62,7 +62,7 @@ class CartScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final cartItemKey=cart.items.keys.toList()[index];
                   final cartItem=cart.items[cartItemKey]!;
-                  return ci.CartItem(id: cartItemKey, title: cartItem.title, quantity: cartItem.quantity, price: cartItem.price);
+                  return CartItem(id: cartItemKey, title: cartItem.title, quantity: cartItem.quantity, price: cartItem.price);
                 }),
           )
         ],
