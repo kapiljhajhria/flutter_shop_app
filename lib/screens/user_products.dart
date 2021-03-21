@@ -7,11 +7,10 @@ import 'package:provider/provider.dart';
 import '../providers/products.dart';
 
 class UserProductsScreen extends StatelessWidget {
-  static String routeName = "/userProducts";
+  static String routeName = "/user-products";
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
-    print("total items length ${productsData.items.length}");
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Products"),
