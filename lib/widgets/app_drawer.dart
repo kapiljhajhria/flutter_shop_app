@@ -28,9 +28,10 @@ class AppDrawer extends StatelessWidget {
                   .pushReplacementNamed(OrdersScreen.routeName);
             },
           ),
+          Divider(),
           ListTile(
-            leading: Icon(Icons.supervisor_account_rounded),
-            title: Text("User Products"),
+            leading: Icon(Icons.edit),
+            title: Text("Manage Products"),
             onTap: () {
               Navigator.of(context).pushNamed(UserProductsScreen.routeName);
             },
