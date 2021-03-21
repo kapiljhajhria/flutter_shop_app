@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/cart.dart';
@@ -27,6 +29,32 @@ class CartItem extends StatelessWidget {
       onDismissed: (direction) {
         //remove cart item with given id
         Provider.of<Cart>(context, listen: false).removeItem(productId);
+      },
+      confirmDismiss: (direction) {
+        return showDialog(
+            context: context,
+            builder: (ctx) {
+              return AlertDialog(
+                title: Text("Remove Item"),
+                content: Text("Do you want to remove this item from the cart?"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      // return true;
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text("Yes"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // return false;
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text("No"),
+                  )
+                ],
+              );
+            });
       },
       background: Container(
         color: Theme.of(context).errorColor,
