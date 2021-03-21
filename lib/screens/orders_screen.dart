@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/providers/orders.dart';
+import 'package:flutter_complete_guide/providers/orders.dart' show Orders;
+import 'package:flutter_complete_guide/widgets/app_drawer.dart';
+import 'package:flutter_complete_guide/widgets/order_item.dart';
 import 'package:provider/provider.dart';
 
 class OrdersScreen extends StatelessWidget {
@@ -11,10 +13,11 @@ class OrdersScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Your Orders"),
       ),
+      drawer: AppDrawer(),
       body: ListView.builder(
         itemCount: ordersData.orders.length,
         itemBuilder: (ctx, index) {
-          return Text(ordersData.orders[index].amount.toString());
+          return OrderItem(orderItem: ordersData.orders[index]);
         },
       ),
     );
