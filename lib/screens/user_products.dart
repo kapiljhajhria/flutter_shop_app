@@ -27,15 +27,19 @@ class UserProductsScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(8.0),
         child: ListView.builder(
-          itemCount: productsData.items.length,
-          itemBuilder: (_, index) {
-            Product product = productsData.items[index];
-            // return Image.network(product.imageUrl);
-            return UserProductItem(
-                title: productsData.items[index].title,
-                imageUrl: productsData.items[index].imageUrl);
-          },
-        ),
+            itemCount: productsData.items.length,
+            itemBuilder: (_, index) {
+              Product product = productsData.items[index];
+              // return Image.network(product.imageUrl);
+              return Column(
+                children: [
+                  UserProductItem(
+                      title: productsData.items[index].title,
+                      imageUrl: productsData.items[index].imageUrl),
+                  Divider(),
+                ],
+              );
+            }),
       ),
     );
   }
