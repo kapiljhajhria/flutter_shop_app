@@ -23,7 +23,13 @@ class Cart with ChangeNotifier {
   int get itemCount{
     return _items.length;
   }
-
+  double get totalAmount{
+    double total =0.0;
+    _items.forEach((key, cartItem) {
+      total+=(cartItem.price*cartItem.quanity);
+    });
+    return total;
+  }
   void addItem(String productId, double price, String title) {
     //look if the product already exist in the cart or not
     //if found increase its quantity by 1
