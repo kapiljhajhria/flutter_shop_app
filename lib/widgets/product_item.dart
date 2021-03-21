@@ -47,6 +47,8 @@ class ProductItem extends StatelessWidget {
             ),
             onPressed: () {
               cart.addItem(product.id, product.price, product.title);
+              //remove current snackBar if its being shown
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               //show snackBar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -56,6 +58,7 @@ class ProductItem extends StatelessWidget {
                     label: 'Undo',
                     onPressed: () {
                       //undo current action
+                      cart.removeSingleItem(product.id);
                     },
                   ),
                 ),
