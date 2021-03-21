@@ -23,6 +23,7 @@ class Cart with ChangeNotifier {
   int get itemCount{
     return _items.length;
   }
+
   double get totalAmount{
     double total =0.0;
     _items.forEach((key, cartItem) {
@@ -30,6 +31,7 @@ class Cart with ChangeNotifier {
     });
     return total;
   }
+
   void addItem(String productId, double price, String title) {
     //look if the product already exist in the cart or not
     //if found increase its quantity by 1
@@ -54,5 +56,10 @@ class Cart with ChangeNotifier {
               price: price));
     }
     notifyListeners();
+  }
+
+  void removeItem(String productId){
+      _items.remove(productId);
+      notifyListeners();
   }
 }
