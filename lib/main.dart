@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/cart.dart';
 import 'package:flutter_complete_guide/providers/orders.dart';
 import 'package:flutter_complete_guide/screens/cart_screen.dart';
+import 'package:flutter_complete_guide/screens/edit_product_screen.dart';
 import 'package:flutter_complete_guide/screens/orders_screen.dart';
 import 'package:flutter_complete_guide/screens/user_products.dart';
 import 'package:provider/provider.dart';
@@ -22,21 +23,22 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Orders())
       ],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'MyShop',
-          theme: ThemeData(
-              primarySwatch: Colors.purple,
-              accentColor: Colors.deepOrange,
-              fontFamily: 'Lato',
-              textTheme: TextTheme(headline6: TextStyle(color: Colors.white))),
-          home: ProductsOverviewScreen(),
-          routes: {
-            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-            CartScreen.routerName: (ctx) => CartScreen(),
-            OrdersScreen.routeName: (ctx) => OrdersScreen(),
-            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-            EditProductScreen.routeName: (ctx) => EditProductScreen()
-          }),
+        debugShowCheckedModeBanner: false,
+        title: 'MyShop',
+        theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+            textTheme: TextTheme(headline6: TextStyle(color: Colors.white))),
+        home: ProductsOverviewScreen(),
+        routes: {
+          ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+          CartScreen.routerName: (ctx) => CartScreen(),
+          OrdersScreen.routeName: (ctx) => OrdersScreen(),
+          UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+          EditProductScreen.routeName: (ctx) => EditProductScreen()
+        },
+      ),
     );
   }
 }

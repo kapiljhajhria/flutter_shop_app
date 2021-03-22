@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/cart.dart';
-import 'package:flutter_complete_guide/providers/product.dart';
 
 class OrderItem with ChangeNotifier {
   final String id;
@@ -34,5 +33,4 @@ class Orders with ChangeNotifier {
 
     notifyListeners();
   }
-
 }

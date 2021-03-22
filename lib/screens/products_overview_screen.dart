@@ -19,15 +19,16 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showOnlyFavorites = false;
   @override
   Widget build(BuildContext context) {
-    final productsContainer = Provider.of<Products>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('MyShop'),
         actions: [
           Consumer<Cart>(
-            builder: (BuildContext context, cart,ch) => Badge(
-                  value: cart.itemCount.toString(),
-                  color: Theme.of(context).accentColor, child: ch!,),
+            builder: (BuildContext context, cart, ch) => Badge(
+              value: cart.itemCount.toString(),
+              color: Theme.of(context).accentColor,
+              child: ch!,
+            ),
             child: IconButton(
               icon: Icon(Icons.shopping_cart),
               onPressed: () {
