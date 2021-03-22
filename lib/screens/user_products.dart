@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/screens/edit_product_screen.dart';
 import 'package:flutter_complete_guide/widgets/app_drawer.dart';
 import 'package:flutter_complete_guide/widgets/user_product_items.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class UserProductsScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
             onPressed: () {
               //go to screen where user can add new products
+              Navigator.of(context).pushNamed(EditProductScreen.routeName);
             },
           )
         ],
