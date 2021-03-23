@@ -15,7 +15,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImagePreview);
-    // TODO: implement initState
     super.initState();
   }
 
@@ -66,7 +65,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             )
                           : FittedBox(
                               fit: BoxFit.contain,
-                              child: Image.network(_imageUrlController.text)),
+                              child: Image.network(_imageUrlController.text),
+                            ),
                     ),
                     Expanded(
                       child: TextFormField(
