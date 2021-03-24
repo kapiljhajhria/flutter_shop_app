@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/providers/product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static String routeName = "/edit-product";
@@ -11,7 +12,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
+  Map<String, String> _formData = new Map();
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImagePreview);
@@ -23,22 +25,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Product"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: _saveForm,
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Form(
+          key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 TextFormField(
                   decoration: InputDecoration(labelText: "Title"),
                   textInputAction: TextInputAction.next,
+                  onSaved: _updateFormData("title"),
+                  onChanged: _updateFormData("title"),
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Price"),
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   focusNode: _priceFocusNode, //not required anymore
+                  onSaved: _updateFormData("price"),
+                  onChanged: _updateFormData("price"),
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Description"),
@@ -46,6 +59,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.multiline,
                   minLines: 2,
                   maxLines: 5,
+                  onSaved: _updateFormData("description"),
+                  onChanged: _updateFormData("description"),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -79,10 +94,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           if (_imageUrlController.text.isNotEmpty)
                             setState(() {});
                         },
+                        onFieldSubmitted: (_) {
+                          _saveForm();
+                        },
+                        onSaved: _updateFormData("imageUrl"),
+                        onChanged: _updateFormData("imageUrl"),
                       ),
                     ),
                   ],
                 ),
+                ElevatedButton(
+                  onPressed: _saveForm,
+                  child: Text("Save"),
+                )
               ],
             ),
           ),
@@ -105,5 +129,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!_imageUrlFocusNode.hasFocus) {
       setState(() {});
     }
+  }
+
+  void _saveForm() {
+    //print form data thats saves as map
+    print(_formData);
+    //create new Product using above formaData
+    //best practice to create a custom constructor that accepts a map
+    final tempP = Product.fromFormMapData(_formData);
+    print(tempP.description);
+    _formKey.currentState?.save();
+  }
+
+  void Function(String?) _updateFormData(String keyToUpdate) {
+    return (String? value) {
+      _formData[keyToUpdate] = value!;
+    };
   }
 }
