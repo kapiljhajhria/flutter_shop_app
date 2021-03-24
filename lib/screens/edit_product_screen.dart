@@ -44,6 +44,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   textInputAction: TextInputAction.next,
                   onSaved: _updateFormData("title"),
                   onChanged: _updateFormData("title"),
+                  validator: _formValidator("title"),
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Price"),
@@ -52,6 +53,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   focusNode: _priceFocusNode, //not required anymore
                   onSaved: _updateFormData("price"),
                   onChanged: _updateFormData("price"),
+                  validator: _formValidator("price"),
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Description"),
@@ -61,6 +63,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 5,
                   onSaved: _updateFormData("description"),
                   onChanged: _updateFormData("description"),
+                  validator: _formValidator("description"),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -79,7 +82,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               softWrap: true,
                             )
                           : FittedBox(
-                              fit: BoxFit.contain,
+                              // fit: BoxFit.contain,
                               child: Image.network(_imageUrlController.text),
                             ),
                     ),
@@ -99,6 +102,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         },
                         onSaved: _updateFormData("imageUrl"),
                         onChanged: _updateFormData("imageUrl"),
+                        validator: _formValidator("imageUrl"),
                       ),
                     ),
                   ],
@@ -132,6 +136,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    //validate form
+    bool isValidForm = _formKey.currentState!.validate();
+
+    if (!isValidForm) return;
     //print form data thats saves as map
     print(_formData);
     //create new Product using above formaData
@@ -144,6 +152,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void Function(String?) _updateFormData(String keyToUpdate) {
     return (String? value) {
       _formData[keyToUpdate] = value!;
+    };
+  }
+
+  String? Function(String?) _formValidator(String validateThis) {
+    return (String? value) {
+      // if (value == null) return "Required Field";
+      if (value!.isEmpty) return "Required Field";
+      //else use switch case or if else and show other types
+      ///TODO: implement individual validator using if else or switch case
+      //of error based on the input, for now we are just checking
+      //if its empty or not
+      return null;
     };
   }
 }
