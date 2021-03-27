@@ -37,7 +37,6 @@ class Products with ChangeNotifier {
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
   ];
-  int _startingId = 4;
   // bool _favoritesOnly = false;
 
   // showFavoritesOnly() {
@@ -68,18 +67,15 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProduct() {
-    // _items.add(value);
-    _startingId++;
+  void addProduct(
+      String title, String description, String price, String imageUrl) {
     _items.add(
       Product(
-        id: " p$_startingId",
-        title: 'A Pan',
-        description: 'Prepare any meal you want.',
-        price: 49.99,
-        imageUrl:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-      ),
+          id: DateTime.now().toString(),
+          title: title,
+          description: description,
+          price: double.parse(price),
+          imageUrl: imageUrl),
     );
     notifyListeners();
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/product.dart';
+import 'package:flutter_complete_guide/providers/products.dart';
+import 'package:provider/provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   static String routeName = "/edit-product";
@@ -138,15 +140,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void _saveForm() {
     //validate form
     bool isValidForm = _formKey.currentState!.validate();
-
     if (!isValidForm) return;
     //print form data thats saves as map
     print(_formData);
-    //create new Product using above formaData
-    //best practice to create a custom constructor that accepts a map
-    final tempP = Product.fromFormMapData(_formData);
-    print(tempP.description);
+    //save new product to products list
+    Products products = Provider.of<Products>(context, listen: false);
     _formKey.currentState?.save();
+    products.addProduct(_formData["title"]!, _formData["description"]!,
+        _formData["price"]!, _formData["imageUrl"]!);
+    //leave screen after saving
+    Navigator.of(context).pop();
   }
 
   void Function(String?) _updateFormData(String keyToUpdate) {

@@ -69,7 +69,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Provider.of<Products>(context, listen: false).addProduct();
+          // Provider.of<Products>(context, listen: false).addProduct();
         },
       ),
     );
