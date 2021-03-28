@@ -13,19 +13,48 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
-  final _imageUrlController = TextEditingController();
+  TextEditingController _imageUrlController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   Product _editedProduct = Product(
-      id: DateTime.now().toString(),
-      title: "",
-      description: "",
-      price: 0,
-      imageUrl: "");
-  Map<String, String> _formData = new Map();
+      id: "newProduct", title: "", description: "", price: 0, imageUrl: "");
+  Map<String, String> _intiValues = {
+    "title": "",
+    "description": "",
+    "price": "",
+    "imageUrl": ""
+  };
+  var _isInit =
+      true; //to prevent re run of didChangeDependcies. we need to run it just once before first build
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImagePreview);
+
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if (_isInit) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+
+      if (args != null) {
+        String productId = args as String;
+        // if(productId!=null)
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
+        _intiValues = {
+          "title": _editedProduct.title,
+          "description": _editedProduct.description,
+          "price": _editedProduct.price.toString(),
+          "imageUrl": _editedProduct.imageUrl
+        };
+        _imageUrlController =
+            TextEditingController(text: _intiValues["imageUrl"]);
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -48,36 +77,43 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: _intiValues["title"],
                   decoration: InputDecoration(labelText: "Title"),
                   textInputAction: TextInputAction.next,
                   onSaved: (value) {
                     _editedProduct = Product(
-                        id: _editedProduct.id,
-                        title: value!,
-                        description: _editedProduct.description,
-                        price: _editedProduct.price,
-                        imageUrl: _editedProduct.imageUrl);
+                      id: _editedProduct.id,
+                      title: value!,
+                      description: _editedProduct.description,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavorite: _editedProduct.isFavorite,
+                    );
                   },
                   // onChanged: _updateFormData("title"),
                   validator: _formValidator("title"),
                 ),
                 TextFormField(
+                  initialValue: _intiValues["price"],
                   decoration: InputDecoration(labelText: "Price"),
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   focusNode: _priceFocusNode, //not required anymore
                   onSaved: (value) {
                     _editedProduct = Product(
-                        id: _editedProduct.id,
-                        title: _editedProduct.title,
-                        description: _editedProduct.description,
-                        price: double.parse(value!),
-                        imageUrl: _editedProduct.imageUrl);
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: _editedProduct.description,
+                      price: double.parse(value!),
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavorite: _editedProduct.isFavorite,
+                    );
                   },
                   // onChanged: _updateFormData("price"),
                   validator: _formValidator("price"),
                 ),
                 TextFormField(
+                  initialValue: _intiValues["description"],
                   decoration: InputDecoration(labelText: "Description"),
                   // textInputAction: TextInputAction.next,//remove for multiline input
                   keyboardType: TextInputType.multiline,
@@ -85,11 +121,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 5,
                   onSaved: (value) {
                     _editedProduct = Product(
-                        id: _editedProduct.id,
-                        title: _editedProduct.title,
-                        description: value!,
-                        price: _editedProduct.price,
-                        imageUrl: _editedProduct.imageUrl);
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: value!,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl,
+                      isFavorite: _editedProduct.isFavorite,
+                    );
                   },
                   // onChanged: _updateFormData("description"),
                   validator: _formValidator("description"),
@@ -117,6 +155,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        // initialValue: _intiValues["imageUrl"],
                         decoration: InputDecoration(labelText: 'Image URL'),
                         keyboardType: TextInputType.url,
                         textInputAction: TextInputAction.done,
@@ -131,11 +170,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         },
                         onSaved: (value) {
                           _editedProduct = Product(
-                              id: _editedProduct.id,
-                              title: _editedProduct.title,
-                              description: _editedProduct.description,
-                              price: _editedProduct.price,
-                              imageUrl: value!);
+                            id: _editedProduct.id,
+                            title: _editedProduct.title,
+                            description: _editedProduct.description,
+                            price: _editedProduct.price,
+                            imageUrl: value!,
+                            isFavorite: _editedProduct.isFavorite,
+                          );
                         },
                         // onChanged: _updateFormData("imageUrl"),
                         validator: _formValidator("imageUrl"),
@@ -175,16 +216,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
     //validate form
     bool isValidForm = _formKey.currentState!.validate();
     if (!isValidForm) return;
-    //print form data thats saves as map
-    print(_formData);
-    //save new product to products list
+
+    _formKey.currentState!.save();
+
+    //check if the product is being added or edited
     Products products = Provider.of<Products>(context, listen: false);
-    _formKey.currentState?.save();
-    products.addProduct(
-        description: _editedProduct.description,
-        imageUrl: _editedProduct.imageUrl,
-        price: _editedProduct.price.toString(),
-        title: _editedProduct.title);
+    if (_editedProduct.id == "newProduct") {
+      //save new product to products list
+
+      _formKey.currentState?.save();
+      products.addProduct(
+          description: _editedProduct.description,
+          imageUrl: _editedProduct.imageUrl,
+          price: _editedProduct.price.toString(),
+          title: _editedProduct.title);
+    } else {
+      //edit the current product
+      //find the current product index and
+      //replace that with the edited product
+      products.updateProduct(_editedProduct.id, _editedProduct);
+    }
+
     //leave screen after saving
     Navigator.of(context).pop();
   }
@@ -200,7 +252,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
       // if (value == null) return "Required Field";
       if (value!.isEmpty) return "Required Field";
       //else use switch case or if else and show other types
-      ///TODO: implement individual validator using if else or switch case
       ///
       switch (validateThis) {
         case "title":
