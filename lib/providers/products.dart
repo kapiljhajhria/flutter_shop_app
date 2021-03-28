@@ -68,7 +68,10 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(
-      String title, String description, String price, String imageUrl) {
+      {required String title,
+      required String description,
+      required String price,
+      required String imageUrl}) {
     _items.add(
       Product(
           id: DateTime.now().toString(),

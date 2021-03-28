@@ -15,6 +15,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  Product _editedProduct = Product(
+      id: DateTime.now().toString(),
+      title: "",
+      description: "",
+      price: 0,
+      imageUrl: "");
   Map<String, String> _formData = new Map();
   @override
   void initState() {
@@ -44,8 +50,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 TextFormField(
                   decoration: InputDecoration(labelText: "Title"),
                   textInputAction: TextInputAction.next,
-                  onSaved: _updateFormData("title"),
-                  onChanged: _updateFormData("title"),
+                  onSaved: (value) {
+                    _editedProduct = Product(
+                        id: _editedProduct.id,
+                        title: value!,
+                        description: _editedProduct.description,
+                        price: _editedProduct.price,
+                        imageUrl: _editedProduct.imageUrl);
+                  },
+                  // onChanged: _updateFormData("title"),
                   validator: _formValidator("title"),
                 ),
                 TextFormField(
@@ -53,8 +66,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   focusNode: _priceFocusNode, //not required anymore
-                  onSaved: _updateFormData("price"),
-                  onChanged: _updateFormData("price"),
+                  onSaved: (value) {
+                    _editedProduct = Product(
+                        id: _editedProduct.id,
+                        title: _editedProduct.title,
+                        description: _editedProduct.description,
+                        price: double.parse(value!),
+                        imageUrl: _editedProduct.imageUrl);
+                  },
+                  // onChanged: _updateFormData("price"),
                   validator: _formValidator("price"),
                 ),
                 TextFormField(
@@ -63,8 +83,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.multiline,
                   minLines: 2,
                   maxLines: 5,
-                  onSaved: _updateFormData("description"),
-                  onChanged: _updateFormData("description"),
+                  onSaved: (value) {
+                    _editedProduct = Product(
+                        id: _editedProduct.id,
+                        title: _editedProduct.title,
+                        description: value!,
+                        price: _editedProduct.price,
+                        imageUrl: _editedProduct.imageUrl);
+                  },
+                  // onChanged: _updateFormData("description"),
                   validator: _formValidator("description"),
                 ),
                 Row(
@@ -102,8 +129,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         onFieldSubmitted: (_) {
                           _saveForm();
                         },
-                        onSaved: _updateFormData("imageUrl"),
-                        onChanged: _updateFormData("imageUrl"),
+                        onSaved: (value) {
+                          _editedProduct = Product(
+                              id: _editedProduct.id,
+                              title: _editedProduct.title,
+                              description: _editedProduct.description,
+                              price: _editedProduct.price,
+                              imageUrl: value!);
+                        },
+                        // onChanged: _updateFormData("imageUrl"),
                         validator: _formValidator("imageUrl"),
                       ),
                     ),
@@ -146,17 +180,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
     //save new product to products list
     Products products = Provider.of<Products>(context, listen: false);
     _formKey.currentState?.save();
-    products.addProduct(_formData["title"]!, _formData["description"]!,
-        _formData["price"]!, _formData["imageUrl"]!);
+    products.addProduct(
+        description: _editedProduct.description,
+        imageUrl: _editedProduct.imageUrl,
+        price: _editedProduct.price.toString(),
+        title: _editedProduct.title);
     //leave screen after saving
     Navigator.of(context).pop();
   }
 
-  void Function(String?) _updateFormData(String keyToUpdate) {
-    return (String? value) {
-      _formData[keyToUpdate] = value!;
-    };
-  }
+  // void Function(String?) _updateFormData(String keyToUpdate) {
+  //   return (String? value) {
+  //     _formData[keyToUpdate] = value!;
+  //   };
+  // }
 
   String? Function(String?) _formValidator(String validateThis) {
     return (String? value) {
@@ -164,6 +201,39 @@ class _EditProductScreenState extends State<EditProductScreen> {
       if (value!.isEmpty) return "Required Field";
       //else use switch case or if else and show other types
       ///TODO: implement individual validator using if else or switch case
+      ///
+      switch (validateThis) {
+        case "title":
+          {
+            if (value.isEmpty) return "Title is required";
+            if (value.length < 3) return "Title is too short";
+            break;
+          }
+        case "description":
+          {
+            if (value.isEmpty) return "Description is required";
+            if (value.length < 20) return "Description is too short";
+            break;
+          }
+        case "price":
+          {
+            if (value.isEmpty) return "Price is required";
+            if (value == "0") return "Price can't be zero";
+            break;
+          }
+        case "imageUrl":
+          {
+            if (value.isEmpty) return "Image URL is required";
+            if (value.length < 5) return "Invalid URL";
+            if (!value.contains("jpg") &&
+                !value.contains("jpeg") &&
+                !value.contains("png")) return "Invalid URL";
+            break;
+          }
+
+        default:
+          return null;
+      }
       //of error based on the input, for now we are just checking
       //if its empty or not
       return null;
