@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/providers/products.dart';
 import 'package:flutter_complete_guide/screens/edit_product_screen.dart';
+import 'package:provider/provider.dart';
 
 class UserProductItem extends StatelessWidget {
   final String id;
@@ -37,6 +39,11 @@ class UserProductItem extends StatelessWidget {
               color: Theme.of(context).errorColor,
               onPressed: () {
                 //delete product
+                Provider.of<Products>(context, listen: false).deleteProduct(id);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                  "Deleted $title",
+                )));
               },
             ),
           ],
