@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'product.dart';
+import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
+  static const url =
+      "https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json";
+
   List<Product> _items = [
     Product(
       id: 'p1',
@@ -67,14 +73,27 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProduct(
+  Future<void> addProduct(
       {required String title,
       required String description,
       required String price,
-      required String imageUrl}) {
+      required String imageUrl}) async {
+    Map<String, dynamic> data = {
+      "id": DateTime.now().toString(),
+      "title": title,
+      "description": description,
+      "price": double.parse(price).toString(),
+      "imageUrl": imageUrl
+    };
+    http.Response response =
+        await http.post(Uri.parse(url), body: json.encode(data));
+    //response.body.name will give you the new doc id.
+    print(response.statusCode);
+    print(response.body);
+    final String productId = json.decode(response.body)["name"];
     _items.add(
       Product(
-          id: DateTime.now().toString(),
+          id: productId,
           title: title,
           description: description,
           price: double.parse(price),
