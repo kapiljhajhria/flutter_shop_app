@@ -225,15 +225,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
 
     Products products = Provider.of<Products>(context, listen: false);
-    if (_editedProduct.id == "newProduct") {
-      _formKey.currentState?.save();
-      await products.addProduct(
-          description: _editedProduct.description,
-          imageUrl: _editedProduct.imageUrl,
-          price: _editedProduct.price.toString(),
-          title: _editedProduct.title);
-    } else {
-      await products.updateProduct(_editedProduct.id, _editedProduct);
+    try {
+      if (_editedProduct.id == "newProduct") {
+        _formKey.currentState?.save();
+        await products.addProduct(
+            description: _editedProduct.description,
+            imageUrl: _editedProduct.imageUrl,
+            price: _editedProduct.price.toString(),
+            title: _editedProduct.title);
+      } else {
+        await products.updateProduct(_editedProduct.id, _editedProduct);
+      }
+    } catch (e) {
+      print("error while adding new  product or updating current product ");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error Saving, Try Again after some time")));
+      setState(() {
+        _showLoadingIndicator = false;
+      });
+      return;
     }
     setState(() {
       _showLoadingIndicator = false;
