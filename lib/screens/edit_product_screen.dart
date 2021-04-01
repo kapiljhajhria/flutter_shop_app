@@ -24,8 +24,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     "price": "",
     "imageUrl": ""
   };
-  var _isInit =
-      true; //to prevent re run of didChangeDependcies. we need to run it just once before first build
+  var _isInit = true;
 
   bool _showLoadingIndicator = false;
   @override
@@ -37,13 +36,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     if (_isInit) {
       final args = ModalRoute.of(context)?.settings.arguments;
 
       if (args != null) {
         String productId = args as String;
-        // if(productId!=null)
+
         _editedProduct =
             Provider.of<Products>(context, listen: false).findById(productId);
         _intiValues = {
@@ -98,7 +96,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           isFavorite: _editedProduct.isFavorite,
                         );
                       },
-                      // onChanged: _updateFormData("title"),
                       validator: _formValidator("title"),
                     ),
                     TextFormField(
@@ -106,7 +103,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       decoration: InputDecoration(labelText: "Price"),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
-                      focusNode: _priceFocusNode, //not required anymore
+                      focusNode: _priceFocusNode,
                       onSaved: (value) {
                         _editedProduct = Product(
                           id: _editedProduct.id,
@@ -117,13 +114,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           isFavorite: _editedProduct.isFavorite,
                         );
                       },
-                      // onChanged: _updateFormData("price"),
                       validator: _formValidator("price"),
                     ),
                     TextFormField(
                       initialValue: _intiValues["description"],
                       decoration: InputDecoration(labelText: "Description"),
-                      // textInputAction: TextInputAction.next,//remove for multiline input
                       keyboardType: TextInputType.multiline,
                       minLines: 2,
                       maxLines: 5,
@@ -137,7 +132,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           isFavorite: _editedProduct.isFavorite,
                         );
                       },
-                      // onChanged: _updateFormData("description"),
                       validator: _formValidator("description"),
                     ),
                     Row(
@@ -157,14 +151,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                   softWrap: true,
                                 )
                               : FittedBox(
-                                  // fit: BoxFit.contain,
                                   child:
                                       Image.network(_imageUrlController.text),
                                 ),
                         ),
                         Expanded(
                           child: TextFormField(
-                            // initialValue: _intiValues["imageUrl"],
                             decoration: InputDecoration(labelText: 'Image URL'),
                             keyboardType: TextInputType.url,
                             textInputAction: TextInputAction.done,
@@ -187,7 +179,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 isFavorite: _editedProduct.isFavorite,
                               );
                             },
-                            // onChanged: _updateFormData("imageUrl"),
                             validator: _formValidator("imageUrl"),
                           ),
                         ),
@@ -219,14 +210,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _updateImagePreview() {
-    //update image preview container with the image from url on focus change
     if (!_imageUrlFocusNode.hasFocus) {
       setState(() {});
     }
   }
 
   void _saveForm(BuildContext context) async {
-    //validate form
     bool isValidForm = _formKey.currentState!.validate();
     if (!isValidForm) return;
 
@@ -234,11 +223,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
     setState(() {
       _showLoadingIndicator = true;
     });
-    //check if the product is being added or edited
+
     Products products = Provider.of<Products>(context, listen: false);
     if (_editedProduct.id == "newProduct") {
-      //save new product to products list
-
       _formKey.currentState?.save();
       await products.addProduct(
           description: _editedProduct.description,
@@ -246,30 +233,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
           price: _editedProduct.price.toString(),
           title: _editedProduct.title);
     } else {
-      //edit the current product
-      //find the current product index and
-      //replace that with the edited product
       await products.updateProduct(_editedProduct.id, _editedProduct);
     }
     setState(() {
       _showLoadingIndicator = false;
     });
-    //leave screen after saving
+
     Navigator.of(context).pop();
   }
 
-  // void Function(String?) _updateFormData(String keyToUpdate) {
-  //   return (String? value) {
-  //     _formData[keyToUpdate] = value!;
-  //   };
-  // }
-
   String? Function(String?) _formValidator(String validateThis) {
     return (String? value) {
-      // if (value == null) return "Required Field";
       if (value!.isEmpty) return "Required Field";
-      //else use switch case or if else and show other types
-      ///
+
       switch (validateThis) {
         case "title":
           {
@@ -302,8 +278,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         default:
           return null;
       }
-      //of error based on the input, for now we are just checking
-      //if its empty or not
+
       return null;
     };
   }
