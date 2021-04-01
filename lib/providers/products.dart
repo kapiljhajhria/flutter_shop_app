@@ -102,9 +102,10 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
     print("product id to update $id");
     print("product to add ${newProduct.title}");
+    await Future.delayed(Duration(seconds: 6));
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
 
     _items[prodIndex] = newProduct;
