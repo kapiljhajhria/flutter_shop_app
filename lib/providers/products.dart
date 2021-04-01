@@ -79,7 +79,7 @@ class Products with ChangeNotifier {
       required String price,
       required String imageUrl}) async {
     Map<String, dynamic> data = {
-      "id": DateTime.now().toString(),
+      // "id": DateTime.now().toString(),
       "title": title,
       "description": description,
       "price": double.parse(price).toString(),
