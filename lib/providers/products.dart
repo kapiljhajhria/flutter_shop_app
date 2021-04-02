@@ -76,12 +76,21 @@ class Products with ChangeNotifier {
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
-    debugPrint("product id to update $id");
-    debugPrint("product to add ${newProduct.title}");
-    await Future.delayed(const Duration(seconds: 6));
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
-
-    _items[prodIndex] = newProduct;
+    if (prodIndex >= 0) {
+      final url =
+          "https://shop-app-4ff74-default-rtdb.firebaseio.com/products/$id.json";
+      await http.patch(Uri.parse(url),
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'imageUrl': newProduct.imageUrl,
+            'price': newProduct.price
+          }));
+      _items[prodIndex] = newProduct;
+    } else {
+      debugPrint("product ot found for edit");
+    }
     notifyListeners();
   }
 
