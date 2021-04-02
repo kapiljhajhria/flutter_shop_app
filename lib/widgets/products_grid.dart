@@ -7,21 +7,23 @@ import './product_item.dart';
 class ProductsGrid extends StatelessWidget {
   final bool showOnlyFavorites;
 
-  ProductsGrid(this.showOnlyFavorites);
+  const ProductsGrid({required this.showOnlyFavorites});
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
-    final products = showOnlyFavorites?productsData.favoriteOnlyItems:productsData.items;
+    final products =
+        showOnlyFavorites ? productsData.favoriteOnlyItems : productsData.items;
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
+
       ///TODO: fix bug, when in favorites mode, removing item from favorite should refresh state and remove the item from the fav list
       ///ChangeNotifierProvider.value causing this bug
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: products[i],
         child: ProductItem(),
       ),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 3 / 2,
         crossAxisSpacing: 10,

@@ -11,7 +11,7 @@ class OrdersScreen extends StatelessWidget {
     final ordersData = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your Orders"),
+        title: const Text("Your Orders"),
       ),
       drawer: AppDrawer(),
       body: ListView.builder(

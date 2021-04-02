@@ -9,7 +9,8 @@ class CartItem extends StatelessWidget {
   final String title;
   final String productId;
 
-  CartItem(
+  const CartItem(
+      // ignore: avoid_unused_constructor_parameters
       {Key? key,
       required this.productId,
       required this.id,
@@ -32,22 +33,23 @@ class CartItem extends StatelessWidget {
           context: context,
           builder: (ctx) {
             return AlertDialog(
-              title: Text("Remove Item"),
-              content: Text("Do you want to remove this item from the cart?"),
+              title: const Text("Remove Item"),
+              content:
+                  const Text("Do you want to remove this item from the cart?"),
               actions: [
                 TextButton(
                   onPressed: () {
                     // return true;
                     Navigator.of(context).pop(true);
                   },
-                  child: Text("Yes"),
+                  child: const Text("Yes"),
                 ),
                 TextButton(
                   onPressed: () {
                     // return false;
                     Navigator.of(context).pop(false);
                   },
-                  child: Text("No"),
+                  child: const Text("No"),
                 )
               ],
             );
@@ -56,18 +58,18 @@ class CartItem extends StatelessWidget {
       },
       background: Container(
         color: Theme.of(context).errorColor,
-        child: Icon(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
           size: 40,
         ),
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
       ),
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: ListTile(
             leading: CircleAvatar(
               child: FittedBox(

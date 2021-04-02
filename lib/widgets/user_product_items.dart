@@ -8,7 +8,8 @@ class UserProductItem extends StatelessWidget {
   final String title;
   final String imageUrl;
 
-  UserProductItem(
+  const UserProductItem(
+      // ignore: avoid_unused_constructor_parameters
       {Key? key,
       required this.title,
       required this.imageUrl,
@@ -26,7 +27,7 @@ class UserProductItem extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               color: Theme.of(context).primaryColor,
               onPressed: () {
                 //start editing product
@@ -35,7 +36,7 @@ class UserProductItem extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               color: Theme.of(context).errorColor,
               onPressed: () {
                 //delete product

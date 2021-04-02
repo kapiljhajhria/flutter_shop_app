@@ -12,7 +12,7 @@ class CartScreen extends StatelessWidget {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cart"),
+        title: const Text("Cart"),
       ),
       body: Column(
         children: [
@@ -41,18 +41,18 @@ class CartScreen extends StatelessWidget {
 
   Card buildTotalCard(Cart cart, BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(12),
+      margin: const EdgeInsets.all(12),
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         //Total Amount and Order Now Button Row
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "Total",
               style: TextStyle(fontSize: 20),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Chip(
@@ -63,7 +63,7 @@ class CartScreen extends StatelessWidget {
               ),
               backgroundColor: Theme.of(context).primaryColor,
             ),
-            Spacer(),
+            const Spacer(),
             TextButton(
                 onPressed: () {
                   //place the order, move to confirmation or payment screen

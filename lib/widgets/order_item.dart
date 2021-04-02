@@ -1,13 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/cart.dart';
-import '../providers/orders.dart' as ord;
 import 'package:intl/intl.dart';
-import 'dart:math';
+
+import '../providers/orders.dart' as ord;
 
 class OrderItem extends StatefulWidget {
   final ord.OrderItem orderItem;
 
+  // ignore: avoid_unused_constructor_parameters
   const OrderItem({Key? key, required this.orderItem});
 
   @override
@@ -20,11 +23,11 @@ class _OrderItemState extends State<OrderItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: Column(
         children: [
           ListTile(
-            onTap: (){
+            onTap: () {
               setState(() {
                 _expanded = !_expanded;
               });
@@ -44,7 +47,7 @@ class _OrderItemState extends State<OrderItem> {
           ),
           if (_expanded)
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               height: min(widget.orderItem.products.length * 20.0 + 20, 200),
               child: ListView.builder(
                 itemCount: widget.orderItem.products.length,
@@ -56,15 +59,15 @@ class _OrderItemState extends State<OrderItem> {
                     children: [
                       Text(
                         orderProduct.title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
                       ),
-                      SizedBox(),
+                      const SizedBox(),
                       Text(
                         "${orderProduct.quantity} x \$${orderProduct.price} = \$${orderProduct.price * orderProduct.quantity} ",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                         ),
                       ),

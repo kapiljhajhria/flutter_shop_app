@@ -13,6 +13,7 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productId =
+        // ignore: cast_nullable_to_non_nullable
         ModalRoute.of(context)!.settings.arguments as String; // is the id!
     final loadedProduct = Provider.of<Products>(
       context,
@@ -26,7 +27,7 @@ class ProductDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               height: 300,
               width: double.infinity,
               child: Image.network(
@@ -34,24 +35,24 @@ class ProductDetailScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               '\$${loadedProduct.price}',
-              style: TextStyle(color: Colors.grey, fontSize: 20),
+              style: const TextStyle(color: Colors.grey, fontSize: 20),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                '${loadedProduct.description}',
+                loadedProduct.description,
                 textAlign: TextAlign.center,
                 softWrap: true,
-                style: TextStyle( fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
             )
           ],

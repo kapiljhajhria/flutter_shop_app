@@ -21,7 +21,7 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  addOrder(List<CartItem> cartProducts, double total) {
+  void addOrder(List<CartItem> cartProducts, double total) {
     //insert so latest order it at top
     _orders.insert(
         0,

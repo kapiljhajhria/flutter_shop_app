@@ -40,7 +40,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       final args = ModalRoute.of(context)?.settings.arguments;
 
       if (args != null) {
-        String productId = args as String;
+        final String productId = args as String;
 
         _editedProduct =
             Provider.of<Products>(context, listen: false).findById(productId);
@@ -62,10 +62,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Product"),
+        title: const Text("Edit Product"),
         actions: [
           IconButton(
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
             onPressed: () {
               _saveForm(context);
             },
@@ -84,7 +84,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   children: [
                     TextFormField(
                       initialValue: _intiValues["title"],
-                      decoration: InputDecoration(labelText: "Title"),
+                      decoration: const InputDecoration(labelText: "Title"),
                       textInputAction: TextInputAction.next,
                       onSaved: (value) {
                         _editedProduct = Product(
@@ -100,7 +100,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                     TextFormField(
                       initialValue: _intiValues["price"],
-                      decoration: InputDecoration(labelText: "Price"),
+                      decoration: const InputDecoration(labelText: "Price"),
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
                       focusNode: _priceFocusNode,
@@ -118,7 +118,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                     TextFormField(
                       initialValue: _intiValues["description"],
-                      decoration: InputDecoration(labelText: "Description"),
+                      decoration:
+                          const InputDecoration(labelText: "Description"),
                       keyboardType: TextInputType.multiline,
                       minLines: 2,
                       maxLines: 5,
@@ -138,7 +139,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 8, right: 10),
+                          margin: const EdgeInsets.only(top: 8, right: 10),
                           width: 100,
                           height: 100,
                           decoration: BoxDecoration(
@@ -146,7 +147,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ),
                           alignment: Alignment.center,
                           child: _imageUrlController.text.isEmpty
-                              ? Text(
+                              ? const Text(
                                   "Enter a URL",
                                   softWrap: true,
                                 )
@@ -157,14 +158,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         ),
                         Expanded(
                           child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Image URL'),
+                            decoration:
+                                const InputDecoration(labelText: 'Image URL'),
                             keyboardType: TextInputType.url,
                             textInputAction: TextInputAction.done,
                             controller: _imageUrlController,
                             focusNode: _imageUrlFocusNode,
                             onEditingComplete: () {
-                              if (_imageUrlController.text.isNotEmpty)
+                              if (_imageUrlController.text.isNotEmpty) {
                                 setState(() {});
+                              }
                             },
                             onFieldSubmitted: (_) {
                               _saveForm(context);
@@ -188,7 +191,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       onPressed: () {
                         _saveForm(context);
                       },
-                      child: Text("Save"),
+                      child: const Text("Save"),
                     )
                   ],
                 ),
@@ -215,8 +218,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm(BuildContext context) async {
-    bool isValidForm = _formKey.currentState!.validate();
+  Future<void> _saveForm(BuildContext context) async {
+    final bool isValidForm = _formKey.currentState!.validate();
     if (!isValidForm) return;
 
     _formKey.currentState!.save();
@@ -224,7 +227,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _showLoadingIndicator = true;
     });
 
-    Products products = Provider.of<Products>(context, listen: false);
+    final Products products = Provider.of<Products>(context, listen: false);
     try {
       if (_editedProduct.id == "newProduct") {
         _formKey.currentState?.save();
@@ -237,9 +240,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await products.updateProduct(_editedProduct.id, _editedProduct);
       }
     } catch (e) {
-      print("error while adding new  product or updating current product ");
+      debugPrint(
+          "error while adding new  product or updating current product ");
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error Saving, Try Again after some time")));
+          const SnackBar(content: Text("Error Saving, Try Again after some time")));
       setState(() {
         _showLoadingIndicator = false;
       });

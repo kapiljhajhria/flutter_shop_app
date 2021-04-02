@@ -27,14 +27,14 @@ class Product with ChangeNotifier {
   // }
 
   Product.fromFormMapData(Map<String, String> formData)
-      : this.id = "p99",
-        this.title = formData["title"]!,
-        this.description = formData["description"]!,
-        this.imageUrl = formData["imageUrl"]!,
-        this.isFavorite = false,
-        this.price = double.parse(formData["price"]!);
+      : id = "p99",
+        title = formData["title"]!,
+        description = formData["description"]!,
+        imageUrl = formData["imageUrl"]!,
+        isFavorite = false,
+        price = double.parse(formData["price"]!);
 
-  toggleFavourite() {
+  void toggleFavourite() {
     isFavorite = !isFavorite;
     notifyListeners();
   }

@@ -26,7 +26,7 @@ class UserProductsScreen extends StatelessWidget {
       ),
       drawer: AppDrawer(),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
           itemCount: productsData.items.length,
           itemBuilder: (_, index) {
@@ -38,7 +38,7 @@ class UserProductsScreen extends StatelessWidget {
                   imageUrl: productsData.items[index].imageUrl,
                   id: productsData.items[index].id,
                 ),
-                Divider(),
+                const Divider(),
               ],
             );
           },

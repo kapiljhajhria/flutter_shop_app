@@ -7,9 +7,9 @@ import 'package:flutter_complete_guide/screens/orders_screen.dart';
 import 'package:flutter_complete_guide/screens/user_products.dart';
 import 'package:provider/provider.dart';
 
-import './screens/products_overview_screen.dart';
-import './screens/product_detail_screen.dart';
 import './providers/products.dart';
+import './screens/product_detail_screen.dart';
+import './screens/products_overview_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
           accentColor: Colors.deepOrange,
           fontFamily: 'Lato',
-          textTheme: TextTheme(
+          textTheme: const TextTheme(
             headline6: TextStyle(color: Colors.white),
           ),
         ),
@@ -39,7 +39,8 @@ class MyApp extends StatelessWidget {
           CartScreen.routerName: (ctx) => CartScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-          EditProductScreen.routeName: (ctx) => EditProductScreen()
+          EditProductScreen.routeName: (ctx) => EditProductScreen(),
+          ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen()
         },
       ),
     );
