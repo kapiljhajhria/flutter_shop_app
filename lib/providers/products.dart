@@ -95,21 +95,20 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     final url =
         "https://shop-app-4ff74-default-rtdb.firebaseio.com/products/$id.json";
     final index = _items.indexWhere((element) => element.id == id);
     Product? existingProduct = _items[index];
     _items.removeAt(index);
-    http.delete(Uri.parse(url)).then((response) {
-      if (response.statusCode >= 400) {
-        throw HttpException("Failed to delete product");
-      }
-      existingProduct = null;
-    }).catchError((_) {
-      _items.insert(index, existingProduct!);
-      notifyListeners();
-    });
     notifyListeners();
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode >= 400) {
+      _items.insert(index, existingProduct);
+      notifyListeners();
+      throw HttpException("Failed to delete product");
+    }
+    existingProduct = null;
   }
 }
