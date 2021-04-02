@@ -37,6 +37,10 @@ class Products with ChangeNotifier {
                 id: productId.toString(),
                 title: productData["title"].toString(),
                 description: productData["description"].toString(),
+                // ignore: avoid_bool_literals_in_conditional_expressions
+                isFavorite: productData['isFavorite'] != null
+                    ? productData['isFavorite'] as bool
+                    : false,
                 price: productData["price"] as double,
                 imageUrl: productData["imageUrl"].toString()))
           });
