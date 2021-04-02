@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/models/http_exception.dart';
+import 'package:flutter_complete_guide/providers/auth.dart';
+import 'package:provider/provider.dart';
 
 enum AuthMode { signup, login }
 
@@ -102,7 +105,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -111,10 +114,38 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.login) {
-      // Log user in
-    } else {
-      // Sign user up
+    try {
+      if (_authMode == AuthMode.login) {
+        // Log user in
+        await Provider.of<Auth>(context, listen: false)
+            .login(_authData['email']!, _authData['password']!);
+      } else {
+        // Sign user up
+        await Provider.of<Auth>(context, listen: false)
+            .signup(_authData['email']!, _authData['password']!);
+      }
+    } on HttpException catch (error) {
+      String errorMessage = 'Authentication Failed';
+
+      if (error.message == 'EMAIL_NOT_FOUND' ||
+          error.message == 'INVALID_PASSWORD') {
+        errorMessage = "Please check you Email/Password";
+      } else if (error.message == "USER_DISABLED") {
+        errorMessage = "Account Disabled, contact support.";
+      } else if (error.message == "EMAIL_EXISTS") {
+        errorMessage = "EMAIL already in use";
+      } else if (error.message == "TOO_MANY_ATTEMPTS_TRY_LATER") {
+        errorMessage = "Login Temporarily blocked. Try again after some time";
+      } else if (error.message == "OPERATION_NOT_ALLOWED") {
+        errorMessage = "Wrong SignIn Method";
+      } else if (error.message.contains("WEAK_PASSWORD")) {
+        errorMessage = "Weak Password";
+      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage)));
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("failed to authenticate, try again later.")));
     }
     setState(() {
       _isLoading = false;
@@ -144,7 +175,7 @@ class _AuthCardState extends State<AuthCard> {
       child: Container(
         height: _authMode == AuthMode.signup ? 320 : 260,
         constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.signup ? 320 : 260),
+            BoxConstraints(minHeight: _authMode == AuthMode.signup ? 360 : 300),
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
