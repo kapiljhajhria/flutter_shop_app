@@ -4,24 +4,50 @@ import 'package:flutter_complete_guide/providers/products.dart';
 import 'package:flutter_complete_guide/screens/cart_screen.dart';
 import 'package:flutter_complete_guide/widgets/app_drawer.dart';
 import 'package:flutter_complete_guide/widgets/badge.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
 
-enum FilterOption { Favorites, All }
+enum FilterOption { favorites, all }
 
 class ProductsOverviewScreen extends StatefulWidget {
+  static String routeName = "/overview";
   @override
   _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showOnlyFavorites = false;
+  bool _isInit = true;
+  bool _isLoading = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MyShop'),
+        title: const Text('MyShop'),
         actions: [
           Consumer<Cart>(
             builder: (BuildContext context, cart, ch) => Badge(
@@ -30,7 +56,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               child: ch!,
             ),
             child: IconButton(
-              icon: Icon(Icons.shopping_cart),
+              icon: const Icon(Icons.shopping_cart),
               onPressed: () {
                 //go to cart screen
                 Navigator.of(context).pushNamed(CartScreen.routerName);
@@ -38,12 +64,12 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             ),
           ),
           PopupMenuButton(
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             onSelected: (selectedValue) {
-              if (selectedValue == FilterOption.Favorites) {
+              if (selectedValue == FilterOption.favorites) {
                 // productsContainer.showFavoritesOnly();
                 _showOnlyFavorites = true;
-              } else if (selectedValue == FilterOption.All) {
+              } else if (selectedValue == FilterOption.all) {
                 // productsContainer.showAll();
                 _showOnlyFavorites = false;
               }
@@ -51,13 +77,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             },
             itemBuilder: (BuildContext context) {
               return <PopupMenuEntry>[
-                PopupMenuItem(
+                const PopupMenuItem(
+                  value: FilterOption.favorites,
                   child: Text("Favorites"),
-                  value: FilterOption.Favorites,
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
+                  value: FilterOption.all,
                   child: Text("All "),
-                  value: FilterOption.All,
                 )
               ];
             },
@@ -65,12 +91,17 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
+      body: LoadingOverlay(
+        isLoading: _isLoading,
+        child: ProductsGrid(
+          showOnlyFavorites: _showOnlyFavorites,
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
         onPressed: () {
           // Provider.of<Products>(context, listen: false).addProduct();
         },
+        child: const Icon(Icons.add),
       ),
     );
   }
