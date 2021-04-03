@@ -240,10 +240,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await products.updateProduct(_editedProduct.id, _editedProduct);
       }
     } catch (e) {
-      debugPrint(
-          "error while adding new  product or updating current product ");
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Error Saving, Try Again after some time")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Error Saving, Try Again after some time")));
       setState(() {
         _showLoadingIndicator = false;
       });

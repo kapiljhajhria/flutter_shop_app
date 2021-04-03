@@ -106,7 +106,6 @@ class _CartScreenState extends State<CartScreen> {
                   //move to orders screen
                   Navigator.of(context).pushNamed(OrdersScreen.routeName);
                 } catch (error) {
-                  debugPrint(error.toString());
                   setState(() {
                     _isLoading = false;
                   });

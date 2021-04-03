@@ -56,7 +56,6 @@ class Product with ChangeNotifier {
       }
     }).catchError((error) {
       _setFavValue(oldStatus);
-      debugPrint("Error trying to set favorite");
     });
   }
 }

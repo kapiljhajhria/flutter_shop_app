@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import './providers/products.dart';
 import './screens/product_detail_screen.dart';
 import './screens/products_overview_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,7 +50,18 @@ class MyApp extends StatelessWidget {
                 headline6: TextStyle(color: Colors.white),
               ),
             ),
-            home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+            home: auth.isAuth
+                ? ProductsOverviewScreen()
+                : FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SplashScreen();
+                      }
+
+                      return AuthScreen();
+                    },
+                  ),
             routes: {
               ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
               CartScreen.routerName: (ctx) => CartScreen(),

@@ -85,8 +85,6 @@ class Products with ChangeNotifier {
     final http.Response response =
         await http.post(Uri.parse(url), body: json.encode(data));
     //response.body.name will give you the new doc id.
-    debugPrint(response.statusCode.toString());
-    debugPrint(response.body);
     final String productId = json.decode(response.body)["name"].toString();
     _items.add(
       Product(
@@ -112,9 +110,7 @@ class Products with ChangeNotifier {
             'price': newProduct.price
           }));
       _items[prodIndex] = newProduct;
-    } else {
-      debugPrint("product ot found for edit");
-    }
+    } else {}
     notifyListeners();
   }
 
