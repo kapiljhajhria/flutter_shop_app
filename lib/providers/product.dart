@@ -41,11 +41,11 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleFavourite() {
+  void toggleFavourite(String? authToken) {
     final bool oldStatus = isFavorite;
     _setFavValue(!isFavorite);
     final url =
-        "https://shop-app-4ff74-default-rtdb.firebaseio.com/products/$id.json";
+        "https://shop-app-4ff74-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
     http
         .patch(Uri.parse(url), body: json.encode({"isFavorite": isFavorite}))
         .then((response) {
