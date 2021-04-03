@@ -39,6 +39,19 @@ class UserProductsScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
+          //can't use below code because future alwys return void, i.e null
+          // if (myProductsSnapshot.data == null) {
+          //   return const Center(
+          //     child:
+          //         Text("You have no products,add some products to get started"),
+          //   );
+          // }
+          if (myProductsSnapshot.hasError) {
+            return const Center(
+              child:
+                  Text("You have no products,add some products to get started"),
+            );
+          }
           return RefreshIndicator(
             onRefresh: () => _refreshProducts(context),
             child: Consumer<Products>(
