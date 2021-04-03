@@ -9,8 +9,9 @@ import 'product.dart';
 class Products with ChangeNotifier {
   List<Product> _items = [];
   final String? authToken;
+  final String? userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this._items, this.userId);
 
   List<Product> get items {
     return [..._items];
@@ -29,9 +30,21 @@ class Products with ChangeNotifier {
         "https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json?auth=$authToken";
     try {
       final http.Response response = await http.get(Uri.parse(url));
-      final extractedData = json.decode(response.body) == null
-          ? {}
-          : json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body);
+
+      if (extractedData == null) {
+        return;
+      }
+
+      //fetch favorites list
+      final favoritesUri = Uri.parse(
+          "https://shop-app-4ff74-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken");
+      final favoritesResponse = await http.get(favoritesUri);
+      Map<String, dynamic> favroitesData = {};
+      if (favoritesResponse.body != null) {
+        favroitesData =
+            json.decode(favoritesResponse.body) as Map<String, dynamic>;
+      }
       final List<Product> loadedProducts = [];
 
       extractedData.forEach((productId, productData) => {
@@ -40,8 +53,8 @@ class Products with ChangeNotifier {
                 title: productData["title"].toString(),
                 description: productData["description"].toString(),
                 // ignore: avoid_bool_literals_in_conditional_expressions
-                isFavorite: productData['isFavorite'] != null
-                    ? productData['isFavorite'] as bool
+                isFavorite: favroitesData[productId] != null
+                    ? favroitesData[productId] as bool
                     : false,
                 price: productData["price"] as double,
                 imageUrl: productData["imageUrl"].toString()))
