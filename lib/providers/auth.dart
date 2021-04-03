@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
@@ -9,7 +10,7 @@ class Auth with ChangeNotifier {
   DateTime? _expiryDate;
   String? _userid;
   final String apiKey = "";
-
+  Timer? _authTimer;
   bool get isAuth {
     return token != null;
   }
@@ -52,6 +53,7 @@ class Auth with ChangeNotifier {
       _userid = responseData['localId'] as String;
       _expiryDate = DateTime.now().add(
           Duration(seconds: int.parse(responseData['expiresIn'] as String)));
+      _autoLogout();
       notifyListeners();
       debugPrint(responseData.toString());
       if (responseData['error'] != null) {
@@ -74,6 +76,19 @@ class Auth with ChangeNotifier {
     _token = null;
     _userid = null;
     _expiryDate = null;
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+      _authTimer = null;
+    }
     notifyListeners();
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+    }
+    debugPrint("autoLogOut called");
+    final timeToExpiry = _expiryDate!.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
   }
 }
