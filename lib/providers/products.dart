@@ -42,9 +42,9 @@ class Products with ChangeNotifier {
       final favoritesUri = Uri.parse(
           "https://shop-app-4ff74-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken");
       final favoritesResponse = await http.get(favoritesUri);
-      final favroitesData = json.decode(favoritesResponse.body);
+      var favroitesData = json.decode(favoritesResponse.body);
       if (favroitesData == null) {
-        return;
+        favroitesData = {};
       }
       final List<Product> loadedProducts = [];
 
