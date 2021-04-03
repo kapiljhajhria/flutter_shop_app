@@ -8,7 +8,20 @@ class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
   String? _userid;
-  final String apiKey = "____________";
+  final String apiKey = "";
+
+  bool get isAuth {
+    return token != null;
+  }
+
+  String? get token {
+    if (_expiryDate != null &&
+        _expiryDate!.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
 
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
@@ -25,8 +38,20 @@ class Auth with ChangeNotifier {
           },
         ),
       );
-      debugPrint(json.decode(response.body).toString());
-      final responseData = json.decode(response.body);
+      // ignore: prefer_interpolation_to_compose_strings
+
+      final responseData = json.decode(response.body) as Map<String, dynamic>;
+      if (responseData['error'] != null) {
+        debugPrint(
+            "error message: ${json.decode(response.body)['error']['message']}");
+      }
+      //set auth details
+      _token = responseData['idToken'] as String;
+      _userid = responseData['localId'] as String;
+      _expiryDate = DateTime.now().add(
+          Duration(seconds: int.parse(responseData['expiresIn'] as String)));
+      notifyListeners();
+      debugPrint(responseData.toString());
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message'] as String);
       }

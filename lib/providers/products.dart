@@ -7,10 +7,10 @@ import 'package:http/http.dart' as http;
 import 'product.dart';
 
 class Products with ChangeNotifier {
-  static const url =
-      "https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json";
-
   List<Product> _items = [];
+  final String? authToken;
+
+  Products(this.authToken, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -25,6 +25,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
+    final url =
+        "https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json?auth=$authToken";
     try {
       final http.Response response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) == null
@@ -63,6 +65,8 @@ class Products with ChangeNotifier {
       "price": double.parse(price),
       "imageUrl": imageUrl
     };
+    final url =
+        "https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json?auth=$authToken";
     final http.Response response =
         await http.post(Uri.parse(url), body: json.encode(data));
     //response.body.name will give you the new doc id.

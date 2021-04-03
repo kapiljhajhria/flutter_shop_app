@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/models/http_exception.dart';
 import 'package:flutter_complete_guide/providers/auth.dart';
+import 'package:flutter_complete_guide/screens/products_overview_screen.dart';
 import 'package:provider/provider.dart';
 
 enum AuthMode { signup, login }
@@ -124,6 +125,8 @@ class _AuthCardState extends State<AuthCard> {
         await Provider.of<Auth>(context, listen: false)
             .signup(_authData['email']!, _authData['password']!);
       }
+      Navigator.of(context)
+          .pushReplacementNamed(ProductsOverviewScreen.routeName);
     } on HttpException catch (error) {
       String errorMessage = 'Authentication Failed';
 
@@ -134,7 +137,7 @@ class _AuthCardState extends State<AuthCard> {
         errorMessage = "Account Disabled, contact support.";
       } else if (error.message == "EMAIL_EXISTS") {
         errorMessage = "EMAIL already in use";
-      } else if (error.message == "TOO_MANY_ATTEMPTS_TRY_LATER") {
+      } else if (error.message.contains("TOO_MANY_ATTEMPTS_TRY_LATER")) {
         errorMessage = "Login Temporarily blocked. Try again after some time";
       } else if (error.message == "OPERATION_NOT_ALLOWED") {
         errorMessage = "Wrong SignIn Method";
@@ -144,6 +147,9 @@ class _AuthCardState extends State<AuthCard> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(errorMessage)));
     } catch (error) {
+      // ignore: prefer_interpolation_to_compose_strings
+      // ignore: avoid_print
+      print(error);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("failed to authenticate, try again later.")));
     }
