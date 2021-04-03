@@ -96,7 +96,7 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.login;
   final Map<String, String> _authData = {
@@ -105,6 +105,24 @@ class _AuthCardState extends State<AuthCard> {
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
+
+  late AnimationController _animationController;
+  late Animation<Size> _heightAnimation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    _heightAnimation = Tween<Size>(
+            begin: const Size(double.infinity, 260),
+            end: const Size(double.infinity, 320))
+        .animate(CurvedAnimation(
+            parent: _animationController, curve: Curves.bounceInOut));
+    _heightAnimation.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
@@ -163,10 +181,12 @@ class _AuthCardState extends State<AuthCard> {
       setState(() {
         _authMode = AuthMode.signup;
       });
+      _animationController.forward();
     } else {
       setState(() {
         _authMode = AuthMode.login;
       });
+      _animationController.reverse();
     }
   }
 
@@ -179,9 +199,8 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.signup ? 320 : 260,
-        constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.signup ? 360 : 300),
+        height: _heightAnimation.value.height,
+        constraints: BoxConstraints(minHeight: _heightAnimation.value.height),
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
