@@ -34,6 +34,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         _isLoading = true;
       });
       Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        ///ToDo: handle this setSate properly. Its called after widget is disposed
         setState(() {
           _isLoading = false;
         });

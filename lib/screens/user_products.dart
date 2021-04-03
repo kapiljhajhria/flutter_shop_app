@@ -10,12 +10,13 @@ class UserProductsScreen extends StatelessWidget {
   static String routeName = "/user-products";
 
   Future<void> _refreshProducts(BuildContext context) async {
-    await Provider.of<Products>(context, listen: false).fetchAndSetProducts();
+    await Provider.of<Products>(context, listen: false)
+        .fetchAndSetProducts(filterByUser: true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final productsData = Provider.of<Products>(context);
+    // final productsData = Provider.of<Products>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Products"),
@@ -30,27 +31,41 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () => _refreshProducts(context),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: productsData.items.length,
-            itemBuilder: (_, index) {
-              return Column(
-                children: [
-                  UserProductItem(
-                    key: ValueKey(productsData.items[index].id),
-                    title: productsData.items[index].title,
-                    imageUrl: productsData.items[index].imageUrl,
-                    id: productsData.items[index].id,
+      body: FutureBuilder(
+        future: _refreshProducts(context),
+        builder: (BuildContext context, AsyncSnapshot myProductsSnapshot) {
+          if (myProductsSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return RefreshIndicator(
+            onRefresh: () => _refreshProducts(context),
+            child: Consumer<Products>(
+              builder: (ctx, productsData, _child) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount: productsData.items.length,
+                    itemBuilder: (_, index) {
+                      return Column(
+                        children: [
+                          UserProductItem(
+                            key: ValueKey(productsData.items[index].id),
+                            title: productsData.items[index].title,
+                            imageUrl: productsData.items[index].imageUrl,
+                            id: productsData.items[index].id,
+                          ),
+                          const Divider(),
+                        ],
+                      );
+                    },
                   ),
-                  const Divider(),
-                ],
-              );
-            },
-          ),
-        ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

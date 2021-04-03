@@ -25,9 +25,11 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts({bool filterByUser = false}) async {
+    final filterString =
+        filterByUser ? '&orderBy="creatorId"&equalTo="$userId"' : '';
     final url =
-        "https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json?auth=$authToken";
+        'https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json?auth=$authToken$filterString';
     try {
       final http.Response response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body);
@@ -41,6 +43,7 @@ class Products with ChangeNotifier {
           "https://shop-app-4ff74-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken");
       final favoritesResponse = await http.get(favoritesUri);
       Map<String, dynamic> favroitesData = {};
+      // ignore: unnecessary_null_comparison
       if (favoritesResponse.body != null) {
         favroitesData =
             json.decode(favoritesResponse.body) as Map<String, dynamic>;
@@ -76,7 +79,8 @@ class Products with ChangeNotifier {
       "title": title,
       "description": description,
       "price": double.parse(price),
-      "imageUrl": imageUrl
+      "imageUrl": imageUrl,
+      'creatorId': userId
     };
     final url =
         "https://shop-app-4ff74-default-rtdb.firebaseio.com/products.json?auth=$authToken";
