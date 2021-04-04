@@ -118,9 +118,9 @@ class _AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             end: const Size(double.infinity, 320))
         .animate(CurvedAnimation(
             parent: _animationController, curve: Curves.bounceInOut));
-    _heightAnimation.addListener(() {
-      setState(() {});
-    });
+    // _heightAnimation.addListener(() {
+    //   setState(() {});
+    // });
     super.initState();
   }
 
@@ -198,11 +198,18 @@ class _AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        height: _heightAnimation.value.height,
-        constraints: BoxConstraints(minHeight: _heightAnimation.value.height),
-        width: deviceSize.width * 0.75,
-        padding: const EdgeInsets.all(16.0),
+      child: AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (BuildContext context, Widget? builderChild) {
+          return Container(
+            height: _heightAnimation.value.height,
+            constraints:
+                BoxConstraints(minHeight: _heightAnimation.value.height),
+            width: deviceSize.width * 0.75,
+            padding: const EdgeInsets.all(16.0),
+            child: builderChild,
+          );
+        },
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
