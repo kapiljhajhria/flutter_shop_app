@@ -21,7 +21,7 @@ class ProductItem extends StatelessWidget {
             builder: (context, data, _) => IconButton(
               icon: Icon(
                   data.isFavorite ? Icons.favorite : Icons.favorite_border),
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
               onPressed: () {
                 product.toggleFavourite(authData.token, authData.userId!);
               },
@@ -54,7 +54,7 @@ class ProductItem extends StatelessWidget {
                 ),
               );
             },
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
         child: GestureDetector(
